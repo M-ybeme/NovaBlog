@@ -97,7 +97,9 @@ namespace NovaBlog.Controllers.BlogPostController
                     blogPost.ImageData = await _imageService.ConvertFileToByteArrayAsync(blogPost.BlogPostImage);
                     blogPost.ImageType = blogPost.BlogPostImage.ContentType;
                 }
-          
+
+
+            
                 //post tags to blogPost
                 foreach(int tagId in Tags)
                 {
@@ -158,17 +160,30 @@ namespace NovaBlog.Controllers.BlogPostController
                         blogPost.ImageData = await _imageService.ConvertFileToByteArrayAsync(blogPost.BlogPostImage);
                         blogPost.ImageType = blogPost.BlogPostImage.ContentType;
                     }
-                    //else{return?
+                    
 
                     _context.Update(blogPost);
-                    //clear out old tags
-                    blogPost.Tags.Clear();
+                    
+                    await _context.SaveChangesAsync();
 
                     //add new tags
+                    List<Tag> tags = _context.Tags.Where(t => t.BlogPosts.Contains(blogPost)).ToList();
                     //post tags to blogPost
+
+
+                    //blogPost.Tags.Clear();
+
+                    foreach ( Tag tag in tags)
+                    {
+                        await _blogPostService.IsTagOnBlogPostAsync(tag.Id, blogPost.Id);
+                        //blogPost.Tags.Remove(tag);
+                    }
+                    
+
                     foreach (int tagId in Tags)
                     {
-                        blogPost.Tags.Add(_context.Tags.Find(tagId)!);
+                        await _blogPostService.AddTagToBlogPostAsync(tagId, blogPost.Id);
+                        //blogPost.Tags.Add(_context.Tags.Find(tagId)!);
                     }
 
                     await _context.SaveChangesAsync();

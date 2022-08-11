@@ -3,6 +3,7 @@ using NovaBlog.Data;
 using NovaBlog.Extensions;
 using NovaBlog.Models;
 using NovaBlog.Services.Interfaces;
+using System.Linq;
 
 namespace NovaBlog.Services
 {
@@ -47,5 +48,46 @@ namespace NovaBlog.Services
                 throw;
             }
         }
+
+        public async Task AddTagToBlogPostAsync(int tagId, int blogPostId)
+        {
+            try
+            {
+                //see if category has already been added
+                if (!await IsTagOnBlogPostAsync(tagId, blogPostId))
+                {
+                    //if not then add to Database
+                    BlogPost? blogPost = await _context.BlogPosts.FindAsync(blogPostId);
+                    Tag? tag = await _context.Tags.FindAsync(tagId);
+
+                    if (blogPost != null && tag != null)
+                    {
+                        blogPost.Tags.Add(tag);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+            }
+            catch
+            {
+                throw;
+            }
+
+
+        }
+            public async Task<bool> IsTagOnBlogPostAsync(int tagId, int blogPostId)
+            {
+                try
+                {
+                    Tag? tag = await _context.Tags.FindAsync(tagId);
+
+                    return (await _context.BlogPosts.FirstOrDefaultAsync(b => b.Id == blogPostId))!.Tags.Contains(tag!);
+                                        
+                }
+                catch
+                {
+                    throw;
+                }
+            }
     }
 }
