@@ -141,7 +141,7 @@ namespace NovaBlog.Controllers.BlogPostController
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Contnet,Created,LastUpdated,CategoryId,ImageData,ImageType,Slug,Abstract,IsPublished,IsDeleted,BlogPostImage")] BlogPost blogPost, List<int> Tags)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Contnet,Created,LastUpdated,CategoryId,ImageData,ImageType,Slug,Abstract,IsPublished,IsDeleted,BlogPostImage")] BlogPost blogPost, List<int> TagList)
         {
             if (id != blogPost.Id)
             {
@@ -166,21 +166,21 @@ namespace NovaBlog.Controllers.BlogPostController
                     
                     await _context.SaveChangesAsync();
 
-                    //add new tags
-                    List<Tag> tags = _context.Tags.Where(t => t.BlogPosts.Contains(blogPost)).ToList();
-                    //post tags to blogPost
+                    //create list of old tags
+                    List<Tag> oldTtags = _context.Tags.Where(t => t.BlogPosts.Contains(blogPost)).ToList();
+                    //
 
 
                     //blogPost.Tags.Clear();
 
-                    foreach ( Tag tag in tags)
+                    foreach ( Tag tag in oldTtags)
                     {
-                        await _blogPostService.IsTagOnBlogPostAsync(tag.Id, blogPost.Id);
+                        await _blogPostService.RemoveTagFromBlogPostAsync(tag.Id, blogPost.Id);
                         //blogPost.Tags.Remove(tag);
                     }
                     
 
-                    foreach (int tagId in Tags)
+                    foreach (int tagId in TagList)
                     {
                         await _blogPostService.AddTagToBlogPostAsync(tagId, blogPost.Id);
                         //blogPost.Tags.Add(_context.Tags.Find(tagId)!);

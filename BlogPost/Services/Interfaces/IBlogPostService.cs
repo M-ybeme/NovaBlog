@@ -8,5 +8,7 @@
 
         public Task<bool> IsTagOnBlogPostAsync(int tagId, int blogPostId);
 
+        public Task RemoveTagFromBlogPostAsync(int tagId, int blogPostId);
+
     }
 }

@@ -75,19 +75,44 @@ namespace NovaBlog.Services
 
 
         }
+
+        public async Task RemoveTagFromBlogPostAsync( int tagId, int blogPostId)
+        {
+            try
+            {
+                if(await IsTagOnBlogPostAsync(tagId, blogPostId))
+                {
+                    BlogPost? blogPost = await _context.BlogPosts.FindAsync(blogPostId);
+                    Tag? tag = await _context.Tags.FindAsync(tagId);
+
+                    if (blogPost != null && tag != null)
+                    {
+                        blogPost.Tags.Remove(tag);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+            catch
+            {
+
+                throw;
+            }
+        }
             public async Task<bool> IsTagOnBlogPostAsync(int tagId, int blogPostId)
             {
                 try
                 {
                     Tag? tag = await _context.Tags.FindAsync(tagId);
 
-                    return (await _context.BlogPosts.FirstOrDefaultAsync(b => b.Id == blogPostId))!.Tags.Contains(tag!);
+                    return (await _context.BlogPosts.Include(t => t.Tags)
+                    .FirstOrDefaultAsync(b => b.Id == blogPostId))!.Tags.Contains(tag!);
                                         
                 }
                 catch
                 {
                     throw;
                 }
-            }
+            }        
+
     }
 }
