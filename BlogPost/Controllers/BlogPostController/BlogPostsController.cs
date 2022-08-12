@@ -38,17 +38,20 @@ namespace NovaBlog.Controllers.BlogPostController
         }
 
         // GET: BlogPosts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? slug)
         {
-            if (id == null || _context.BlogPosts == null)
+            if (string.IsNullOrEmpty(slug))
             {
                 return NotFound();
             }
 
-            var blogPost = await _context.BlogPosts
+            BlogPost? blogPost = await _context.BlogPosts
                 .Include(b => b.Category)
+                .Include(b => b.Comments)
+                    .ThenInclude(c => c.Author)
                 .Include(b => b.Tags)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Slug == slug);
+
             if (blogPost == null)
             {
                 return NotFound();
@@ -86,8 +89,6 @@ namespace NovaBlog.Controllers.BlogPostController
                     ViewData["TagsList"] = new MultiSelectList(_context.Tags, "Id", "Name");
 
                     return View(blogPost);
-
-
                 }
                 blogPost.Slug = blogPost.Title!.Slugify();
 
@@ -152,15 +153,28 @@ namespace NovaBlog.Controllers.BlogPostController
             {
                 try
                 {
+                    //Dates Example
                     blogPost.Created = DataUtility.GetPostgresDate(blogPost.Created);
                     blogPost.LastUpdated = DataUtility.GetPostgresDate(DateTime.Now);
 
+                    //image check
                     if (blogPost.BlogPostImage != null)
                     {
                         blogPost.ImageData = await _imageService.ConvertFileToByteArrayAsync(blogPost.BlogPostImage);
                         blogPost.ImageType = blogPost.BlogPostImage.ContentType;
                     }
-                    
+                    //slug 
+                    if (!await _blogPostService.ValidateSlugAsync(blogPost.Title!, blogPost.Id))
+                    {
+                        ModelState.AddModelError("Title", "A similar Title or slug has already been used!");
+
+                        ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
+                        ViewData["TagList"] = new MultiSelectList(_context.Tags, "Id", "Name", TagList);
+
+                        return View(blogPost);
+                    }
+                    blogPost.Slug = blogPost.Title!.Slugify();
+
 
                     _context.Update(blogPost);
                     
@@ -203,7 +217,7 @@ namespace NovaBlog.Controllers.BlogPostController
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", blogPost.CategoryId);
-            ViewData["TagsList"] = new MultiSelectList(_context.Tags, "Id", "Name");
+            ViewData["TagsList"] = new MultiSelectList(_context.Tags, "Id", "Name", TagList);
             return View(blogPost);
         }
 

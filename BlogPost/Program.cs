@@ -11,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = DataUtility.GetConnectionString(builder.Configuration);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString,
+    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+    ));
 
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -52,6 +54,14 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "custom",
+    pattern: "Contnet/{slug}",
+    defaults: new {controller = "BlogPosts", action = "Details" }
+    );
+
+
 
 app.MapControllerRoute(
     name: "default",

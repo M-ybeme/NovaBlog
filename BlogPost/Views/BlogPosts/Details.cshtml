@@ -1,7 +1,9 @@
 ﻿@model NovaBlog.Models.BlogPost
 @using NovaBlog.Services;
 @using NovaBlog.Services.Interfaces;
+@using Microsoft.AspNetCore.Identity;
 
+@inject SignInManager<BlogUser> _SignInManager
 @inject IImageService ImageService
 
 @{
@@ -14,72 +16,109 @@
     <h4>BlogPost</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Title)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Contnet)
+        <dt class="col-sm-2">
+            Content
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Contnet)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Created)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Created)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.LastUpdated)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LastUpdated)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Slug)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Slug)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Abstract)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Abstract)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.IsDeleted)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IsDeleted)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.IsPublished)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IsPublished)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ImageData)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             <img src=@ImageService.ConvertByteArrayToFile(Model.ImageData!, Model.ImageType!) heigth=100 width="80" />
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ImageType)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ImageType)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Category.Name)
         </dd>
+
+        
+        @if (_SignInManager.IsSignedIn(User))
+        {
+            <form asp-action="Create" asp-controller="Comments" method="post">
+                <input type="hidden" asp-for="Id" name="BlogPostId" />
+                <input type="hidden" asp-for="Slug" />
+                <div class="form-group">
+                    <label class="control-label">Add a Comment</label>
+                    <textarea name="Body" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        }
+        else
+        {
+                                                                        //asp-route-returnUrl="/Content/@Model.Slug"
+            <p>
+                <a asp-area="Identity" asp-route-returnUrl="@Url.Action("Details", "BlogPosts", new {Model.Slug})" asp-page="/Account/Login" class="btn btn-info">Login to comment</a>
+            </p>
+        }
+
+
+        <dt class="col-sm-2">
+            <label>@Model.Comments.Count Comments</label>
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (Comment comment in Model.Comments)
+            {
+                <h5>@comment.Body</h5>
+                <p>@comment.Created.ToString("MM-dd-yy hh:mm:ss tt") - @comment.Author!.FullName</p>
+
+            }
+        </dd>
+
         <dt class="col-sm-2">
             Tags
         </dt>
@@ -89,6 +128,7 @@
                 <p>@tag.Name</p>
             }
         </dd>
+
     </dl>
 </div>
 <div>
