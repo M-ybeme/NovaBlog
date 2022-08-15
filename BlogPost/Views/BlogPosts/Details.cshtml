@@ -101,9 +101,9 @@
         else
         {
                                                                         //asp-route-returnUrl="/Content/@Model.Slug"
-            <p>
+            <div>
                 <a asp-area="Identity" asp-route-returnUrl="@Url.Action("Details", "BlogPosts", new {Model.Slug})" asp-page="/Account/Login" class="btn btn-info">Login to comment</a>
-            </p>
+            </div>
         }
 
 
