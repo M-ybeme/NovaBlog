@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<NovaBlog.Models.Category>
+@using NovaBlog.Enums
 @using NovaBlog.Services.Interfaces;
 @using NovaBlog.Services;
 
@@ -41,7 +42,7 @@
                 <td>
                     @if (item.ImageData != null)
                     {
-                        <img src=@ImageService.ConvertByteArrayToFile(item.ImageData!, item.ImageType!) heigth=100 width="80" />
+                        <img src=@ImageService.ConvertByteArrayToFile(item.ImageData!, item.ImageType!,(int)DefaultImage.Category) heigth=100 width="80" />
                     }        
                 </td>
                 <td>

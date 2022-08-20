@@ -120,7 +120,7 @@ namespace NovaBlog.Services
 
             try
             {
-                categories = await _context.Categories.ToListAsync();
+                categories = await _context.Categories.Include(c => c.BlogPosts).ToListAsync();
             }
             catch
             {
@@ -136,8 +136,12 @@ namespace NovaBlog.Services
 
             try
             {
-                blogPosts = await _context.BlogPosts.Include(b => b.Comments)
-                                                    .Include(b => b.Category)                                                    
+                blogPosts = await _context.BlogPosts
+                                                    .Where(b => b.IsDeleted == false)
+                                                    .Include(b => b.Comments)
+                                                        .ThenInclude(c => c.Author)
+                                                    .Include(b => b.Category)
+                                                    .Include(b => b. Tags)
                                                     .ToListAsync();
             }
             catch 
@@ -156,6 +160,8 @@ namespace NovaBlog.Services
                 
                 blogPosts = await _context.BlogPosts.OrderByDescending(b => b.Comments.Count)
                                                     .Include(b => b.Comments)
+                                                        .ThenInclude(c => c.Author)
+                                                    .Include(b => b.Tags)
                                                     .Include(b => b.Category)     
                                                     .Take(count)
                                                     .ToListAsync();
@@ -175,6 +181,9 @@ namespace NovaBlog.Services
             {
                 blogPosts = await _context.BlogPosts.OrderByDescending(b => b.Created)
                                                     .Include(b => b.Category)
+                                                    .Include(b => b.Comments)
+                                                        .ThenInclude(c => c.Author)
+                                                    .Include(b => b.Tags)
                                                     .Take(count)
                                                     .ToListAsync();
             }
@@ -187,5 +196,62 @@ namespace NovaBlog.Services
 
         }
 
+        public IEnumerable<BlogPost> Search(string searchString)
+        {
+            try
+            {
+                IEnumerable<BlogPost> blogPosts = new List<BlogPost>();
+                if (string.IsNullOrWhiteSpace(searchString))
+                {
+                    return blogPosts;
+                }
+                else
+                {
+                    //search queries in db
+                    searchString = searchString.Trim().ToLower();
+
+                    blogPosts = _context.BlogPosts.Where(b => b.Title!.ToLower().Contains(searchString) ||
+                                                              b.Abstract!.ToLower().Contains(searchString) ||
+                                                              b.Contnet!.ToLower().Contains(searchString) ||
+                                                              b.Category!.Name!.ToLower().Contains(searchString) ||
+                                                              b.Comments.Any(
+                                                                  c => c.Body!.ToLower().Contains(searchString) ||
+                                                                       c.Author!.FirstName!.ToLower().Contains(searchString) ||
+                                                                       c.Author.LastName!.ToLower().Contains(searchString)) ||
+                                                              b.Tags.Any(t => t.Name!.ToLower().Contains(searchString)))
+                                                   .Include(b => b.Comments)
+                                                        .ThenInclude(c => c.Author)
+                                                   .Include(b => b.Tags)
+                                                   .Include(b => b.Category)
+                                                   .Where(b => b.IsDeleted == false && b.IsPublished == true)
+                                                   .AsNoTracking()
+                                                   .OrderByDescending(b => b.Created)
+                                                   .AsEnumerable();
+
+                    return blogPosts;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<Tag>> GetAllTagsAsync()
+        {
+            List<Tag> tags = new List<Tag>();
+
+            try
+            {
+                tags = await _context.Tags.Include(c => c.BlogPosts).ToListAsync();
+                return tags;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

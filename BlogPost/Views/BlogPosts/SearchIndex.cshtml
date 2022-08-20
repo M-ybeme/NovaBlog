@@ -1,0 +1,211 @@
+﻿@using NovaBlog.Enums
+@using X.PagedList
+@model IPagedList<BlogPost>
+
+@using NovaBlog.Services
+@using NovaBlog.Services.Interfaces
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+
+@inject IImageService _ImageService
+
+
+<!-- Start Post Single Wrapper  -->
+<div class="post-single-wrapper axil-section-gap bg-color-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1">
+                <div class="axil-post-details">
+                    <div class="tagcloud">
+                        @* Show Tags for all Blogs found in search *@
+                        @*@foreach(Tag tag in Model .. Tags)
+                        {
+                        }*@
+                    </div>
+                    <div class="axil-comment-area">
+                        <div class="comment-respond">
+                            <div class="row row-cols-1">
+                                <div class="col">
+                                    <h1>Search Results</h1>
+                                </div>
+                                <div class="col">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>
+                                                        Title
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (BlogPost blogPost in Model)
+                                                {
+                                                    <tr>
+                                                        <td class="col-5">
+                                                            @if (blogPost.ImageData != null)
+                                                            {
+                                                                <img src="@_ImageService.ConvertByteArrayToFile(blogPost.ImageData, blogPost.ImageType!,(int)DefaultImage.BlogPost)" alt="">
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Img/Placeholder.png" alt="default Image">
+                                                            }
+                                                        </td>
+                                                        <td class="col-7">
+                                                            Title
+                                                        </td>
+                                                        <td>
+                                                            <a asp-action="Details" asp-controller="BlogPosts" asp-route-slug="@blogPost.Slug">Details</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                        <div class="row row-cols-1 g-5">
+                                            <div class="col text-center">
+                                                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                                            </div>
+                                            <div class="col justify-content-center">
+                                                @Html.PagedListPager(Model, pageNum => Url.Action("SearchIndex", new { searchTerm = ViewBag.SearchTerm, pageNum }),
+                                                new PagedListRenderOptions
+                                                {
+                                                LiElementClasses = new string[] { "page-item" },
+                                                PageClasses = new string[] { "page-link" }
+                                                })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Blog Details  -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Post Single Wrapper  -->
+<!-- Start More Stories Area  -->
+<div class="axil-more-stories-area axil-section-gap bg-color-grey">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2 class="title">More Stories</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Start Stories Post  -->
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <!-- Start Post List  -->
+                <div class="post-stories content-block mt--30">
+                    <div class="post-thumbnail">
+                        <a href="post-details.html">
+                            <img src="assets/images/post-single/stories-01.jpg" alt="Post Images">
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-cat">
+                            <div class="post-cat-list">
+                                <a href="#">LEADERSHIP</a>
+                            </div>
+                        </div>
+                        <h5 class="title">
+                            <a href="post-details.html">
+                                Microsoft and Bridgestone launch real-time
+                                tire
+                            </a>
+                        </h5>
+                    </div>
+                </div>
+                <!-- End Post List  -->
+            </div>
+            <!-- Start Stories Post  -->
+            <!-- Start Stories Post  -->
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <!-- Start Post List  -->
+                <div class="post-stories content-block mt--30">
+                    <div class="post-thumbnail">
+                        <a href="post-details.html">
+                            <img src="assets/images/post-single/stories-02.jpg" alt="Post Images">
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-cat">
+                            <div class="post-cat-list">
+                                <a href="#">DESIGN</a>
+                            </div>
+                        </div>
+                        <h5 class="title">
+                            <a href="post-details.html">
+                                Microsoft and Bridgestone launch real-time
+                                tire
+                            </a>
+                        </h5>
+                    </div>
+                </div>
+                <!-- End Post List  -->
+            </div>
+            <!-- Start Stories Post  -->
+            <!-- Start Stories Post  -->
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <!-- Start Post List  -->
+                <div class="post-stories content-block mt--30">
+                    <div class="post-thumbnail">
+                        <a href="post-details.html">
+                            <img src="assets/images/post-single/stories-03.jpg" alt="Post Images">
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-cat">
+                            <div class="post-cat-list">
+                                <a href="#">PRODUCT UPDATES</a>
+                            </div>
+                        </div>
+                        <h5 class="title">
+                            <a href="post-details.html">
+                                Microsoft and Bridgestone launch real-time
+                                tire
+                            </a>
+                        </h5>
+                    </div>
+                </div>
+                <!-- End Post List  -->
+            </div>
+            <!-- Start Stories Post  -->
+            <!-- Start Stories Post  -->
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <!-- Start Post List  -->
+                <div class="post-stories content-block mt--30">
+                    <div class="post-thumbnail">
+                        <a href="post-details.html">
+                            <img src="assets/images/post-single/stories-04.jpg" alt="Post Images">
+                        </a>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-cat">
+                            <div class="post-cat-list">
+                                <a href="#">COLLABORATION</a>
+                            </div>
+                        </div>
+                        <h5 class="title">
+                            <a href="post-details.html">
+                                Microsoft and Bridgestone launch real-time
+                                tire
+                            </a>
+                        </h5>
+                    </div>
+                </div>
+                <!-- End Post List  -->
+            </div>
+            <!-- Start Stories Post  -->
+        </div>
+    </div>
+</div>
+<!-- End More Stories Area  -->

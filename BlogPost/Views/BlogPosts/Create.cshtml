@@ -2,67 +2,111 @@
 
 @{
     ViewData["Title"] = "Create";
+    //Layout = null;
 }
+<link rel="stylesheet" type="text/css" href="~/ckeditor5/sample/styles.css" />
+
 
 <h1>Create</h1>
 
 <h4>BlogPost</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+<div class="post-single-wrapper axil-section-gap bg-color-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="axil-comment-area">
+                    <div class="row text-center">
+                        <div class="col-md-12 text-centered">
+                            <div class="text-center">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <form asp-action="Create" enctype="multipart/form-data">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <div class="form-group">
+                                                <label asp-for="Title" class="control-label fs-3"></label>
+                                                <input asp-for="Title" class="form-control" />
+                                                <span asp-validation-for="Title" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Contnet" class="control-label fs-3">Content</label>
+                                                <textarea asp-for="Contnet" class="form-control editor" rowls="7"></textarea>
+                                                <span asp-validation-for="Contnet" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="CategoryId" class="control-label fs-3"></label>
+                                                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Abstract" class="control-label fs-3"></label>
+                                                <input asp-for="Abstract" class="form-control" />
+                                                <span asp-validation-for="Abstract" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="Tags" class="form-label fs-3">Tags</label>
+                                                <select multiple name="Tags" class="form-control" asp-items="ViewBag.TagsList"></select>
+                                            </div>
+                                            <div class="form-group form-check">
+                                                <label class="form-check-label fs-3">
+                                                    <input class="form-check-input" asp-for="IsPublished" type="checkbox" /> @Html.DisplayNameFor(model => model.IsPublished)
+                                                </label>
+                                            </div>
+                                            <div class="form-group form-check text-center">
+                                                <label asp-for="BlogPostImage" class="control-label fs-3"></label>
+                                                <input asp-for="BlogPostImage" class="form-control" accept=".png,.jpg,.jpeg,.gif,.tif"
+                                                       style="border:0px!important;padding: 0px;padding-bottom:30px;"
+                                                       onchange="document.getElementById('contactImage').src = window.URL.createObjectURL(this.files[0])">
+                                                <span asp-validation-for="BlogPostImage" class="text-danger"></span>
+                                            </div>
+                                            <div class="col col-md-12">
+                                                <img id="imageData" class="img-fluid img-thumbnail" style="width:100px;height:80px" src="~/img/Placeholder.png" />
+                                            </div>
+                                            <span asp-validation-for="BlogPostImage" class="text-danger"></span>
+                                            <div class="form-group mt-2">
+                                                <input type="submit" value="Create" class="btn btn-primary" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <a asp-action="Index">Back to List</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Contnet" class="control-label">Content</label>
-                <input asp-for="Contnet" class="form-control" />
-                <span asp-validation-for="Contnet" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Abstract" class="control-label"></label>
-                <input asp-for="Abstract" class="form-control" />
-                <span asp-validation-for="Abstract" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Tags" class="form-label">Tags</label>
-                <select multiple name="Tags" class="form-control" asp-items="ViewBag.TagsList"></select>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPublished" /> @Html.DisplayNameFor(model => model.IsPublished)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label asp-for="BlogPostImage" class="control-label"></label>
-                <input asp-for="BlogPostImage" class="form-control" accept=".png,.jpg,.jpeg,.gif"
-                       onchange="document.getElementById('contactImage').src = window.URL.createObjectURL(this.files[0])">
-                <span asp-validation-for="BlogPostImage" class="text-danger"></span>
-            </div>
-            <div class="col col-md-4">
-                <img id="imageData" class="img-fluid img-thumbnail" style="width:100px;height:80px" src="~/img/Placeholder.png" />
-            </div>
-            <span asp-validation-for="BlogPostImage" class="text-danger"></span>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    }
+
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+
+            <script src="~/ckeditor5/build/ckeditor.js"></script>
+            <script>
+                ClassicEditor
+                    .create(document.querySelector('.editor'), {
+                        licenseKey: '',
+
+                    })
+                    .then(editor => {
+                        window.editor = editor;
+
+
+                    })
+                    .catch(error => {
+                        console.error('Oops, something went wrong!');
+                        console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+                        console.warn('Build id: xx09iayzufkn-lkt434h3lx2z');
+                        console.error(error);
+                    });
+            </script>
+
+
+        }

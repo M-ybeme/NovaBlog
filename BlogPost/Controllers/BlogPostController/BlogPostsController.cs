@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +11,11 @@ using NovaBlog.Extensions;
 using NovaBlog.Models;
 using NovaBlog.Services;
 using NovaBlog.Services.Interfaces;
+using X.PagedList;
 
 namespace NovaBlog.Controllers.BlogPostController
 {
+    [Authorize(Roles = "Administrator")]
     public class BlogPostsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -31,13 +34,32 @@ namespace NovaBlog.Controllers.BlogPostController
         // GET: BlogPosts
         public async Task<IActionResult> Index()
         {
+            //TODO: Use service
+
             var applicationDbContext = _context.BlogPosts
                                                .Include(b => b.Category)
-                                               .Include(b=>b.Tags);
+                                               .Include(b=>b.Tags)
+                                               .Where(b => b.IsDeleted == false);
+
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> SearchIndex(string searchTerm, int? pageNum)
+        {
+
+            int pageSize = 4;
+            int page = pageNum ?? 1;
+
+            ViewData["SearchTerm"] = searchTerm;
+
+            IPagedList<BlogPost> blogPosts = await _blogPostService.Search(searchTerm).ToPagedListAsync(page, pageSize);
+
+            return View(blogPosts);
+        }
+
         // GET: BlogPosts/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(string? slug)
         {
             if (string.IsNullOrEmpty(slug))
@@ -56,7 +78,7 @@ namespace NovaBlog.Controllers.BlogPostController
             {
                 return NotFound();
             }
-
+            
             return View(blogPost);
         }
 
@@ -250,10 +272,13 @@ namespace NovaBlog.Controllers.BlogPostController
                 return Problem("Entity set 'ApplicationDbContext.BlogPosts'  is null.");
             }
             var blogPost = await _context.BlogPosts.FindAsync(id);
-            if (blogPost != null)
-            {
-                _context.BlogPosts.Remove(blogPost);
-            }
+            //perma delete
+            //if (blogPost != null)
+            //{
+            //    _context.BlogPosts.Remove(blogPost);
+            //}
+            blogPost!.IsDeleted = true;
+
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

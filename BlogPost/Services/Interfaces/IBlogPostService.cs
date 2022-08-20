@@ -20,5 +20,8 @@ namespace NovaBlog.Services.Interfaces
 
         public Task<List<BlogPost>> GetRecentBlogPostsAsync(int count);    // Defined By the Date created.
 
+        public IEnumerable<BlogPost> Search(string searchString);
+        public Task<List<Tag>> GetAllTagsAsync();
+
     }
 }

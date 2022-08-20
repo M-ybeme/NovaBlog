@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NovaBlog.Models;
+using NovaBlog.Services.Interfaces;
+
 
 namespace NovaBlog.Areas.Identity.Pages.Account.Manage
 {
@@ -17,13 +19,16 @@ namespace NovaBlog.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<BlogUser> _userManager;
         private readonly SignInManager<BlogUser> _signInManager;
+        private readonly IImageService _imageService;
 
         public IndexModel(
             UserManager<BlogUser> userManager,
-            SignInManager<BlogUser> signInManager)
+            SignInManager<BlogUser> signInManager,
+            IImageService imageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _imageService = imageService;
         }
 
         /// <summary>
@@ -59,9 +64,22 @@ namespace NovaBlog.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "First Name")]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and a max {1} characters long", MinimumLength = 2)]
+            public string FirstName { get; set; }
+
+            [Display(Name = "Last Name")]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and a max {1} characters long", MinimumLength = 2)]
+            public string LastName { get; set; }
+
+            public byte[] ImageData { get; set; }
+            public string ImageType { get; set; }
+
+            public IFormFile ImageFile { get; set; }
         }
 
-        private async Task LoadAsync(BlogUser user)
+            private async Task LoadAsync(BlogUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -70,7 +88,10 @@ namespace NovaBlog.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                ImageData = user.ImageData
             };
         }
 
@@ -100,6 +121,20 @@ namespace NovaBlog.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            //custom code
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+
+            if(Input.ImageFile != null)
+            {
+                user.ImageData = await _imageService.ConvertFileToByteArrayAsync(Input.ImageFile);
+                user.ImageType = Input.ImageFile.ContentType;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+
+            //end custom code
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
