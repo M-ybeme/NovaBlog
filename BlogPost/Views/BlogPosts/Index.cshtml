@@ -2,7 +2,8 @@
 @using NovaBlog.Enums
 @using NovaBlog.Services;
 @using NovaBlog.Services.Interfaces;
-
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<BlogUser> _SignInManager
 @inject IImageService ImageService
 
 @{
@@ -11,94 +12,149 @@
 }
 
 <h1>Index</h1>
-    <p>
-        <a class="axil-button button-rounded btn-pr" asp-action="Create">Create New</a>
-    </p>
-    <table class="table ms-5 me-5">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                @*<th>
-                    Content
-                </th>*@
-                <th>
-                    @Html.DisplayNameFor(model => model.Created)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastUpdated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Slug)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Abstract)
-                </th>
-                @*<th>
-                    @Html.DisplayNameFor(model => model.IsDeleted)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IsPublished)
-                </th>*@
-                <th>
-                    @Html.DisplayNameFor(model => model.ImageData)
-                </th>
-                <th>
-                    Tag Count
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Category)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    @*<td>
-                        @Html.Raw(item.Contnet)
-                    </td>*@
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Created)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LastUpdated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Slug)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Abstract)
-                    </td>
-                    @*<td>
-                        @Html.DisplayFor(modelItem => item.IsDeleted)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IsPublished)
-                    </td>*@
-                    <td>
-                        @if (item.ImageData != null)
-                        {
-                            <img src=@ImageService.ConvertByteArrayToFile(item.ImageData!, item.ImageType!,(int)DefaultImage.BlogPost) heigth=100 width="80" />
-                        }
-                    </td>
-                    <td>
-                        @item.Tags.Count
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Category!.Name)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="post-single-wrapper axil-section-gap bg-color-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="banner banner-single-post post-formate post-layout pb--40">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="content-block">
+                                    @if (User.IsInRole("Administrator"))
+                                    {
+                                        <p>
+                                            <a class="axil-button button-rounded btn-pr" asp-action="Create">Create New</a>
+                                        </p>
+                                    }
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <p>
+                                                        @Html.DisplayNameFor(model => model.Title)
+                                                    </p>
+                                                </th>
+                                                @*<th>
+                                                Content
+                                                </th>*@
+                                                <th>
+                                                    <p>
+                                                        @Html.DisplayNameFor(model => model.Created)
+                                                    </p>
+                                                </th>
+                                                <th>
+                                                    <p>
+                                                        @Html.DisplayNameFor(model => model.LastUpdated)
+                                                    </p>
+                                                </th>
+                                                <th>
+                                                    <p>
+                                                        @Html.DisplayNameFor(model => model.Slug)
+                                                    </p>
+                                                </th>
+                                                <th>
+                                                    <p>
+                                                        @Html.DisplayNameFor(model => model.Abstract)
+                                                    </p>
+                                                </th>
+                                                @*<th>
+                                                @Html.DisplayNameFor(model => model.IsDeleted)
+                                                </th>
+                                                <th>
+                                                @Html.DisplayNameFor(model => model.IsPublished)
+                                                </th>*@
+                                                <th>
+                                                    <p>
+                                                        @Html.DisplayNameFor(model => model.ImageData)
+                                                    </p>
+                                                </th>
+                                                <th>
+                                                    <p>
+                                                        Tag Count
+                                                    </p>
+                                                </th>
+                                                <th>
+                                                    <p>
+                                                        @Html.DisplayNameFor(model => model.Category)
+                                                    </p>
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <p>
+                                                            @Html.DisplayFor(modelItem => item.Title)
+                                                        </p>
+                                                    </td>
+                                                    @*<td>
+                                                @Html.Raw(item.Contnet)
+                                                </td>*@
+                                                    <td>
+                                                        <p>
+                                                            @Html.DisplayFor(modelItem => item.Created)
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p>
+                                                            @Html.DisplayFor(modelItem => item.LastUpdated)
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p>
+                                                            @Html.DisplayFor(modelItem => item.Slug)
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p>
+                                                            @Html.DisplayFor(modelItem => item.Abstract)
+                                                        </p>
+                                                    </td>
+                                                    @*<td>
+                                                @Html.DisplayFor(modelItem => item.IsDeleted)
+                                                </td>
+                                                <td>
+                                                @Html.DisplayFor(modelItem => item.IsPublished)
+                                                </td>*@
+                                                    <td>
+                                                        @if (item.ImageData != null)
+                                                        {
+                                                            <img src=@ImageService.ConvertByteArrayToFile(item.ImageData!, item.ImageType!,(int)DefaultImage.BlogPost) heigth=100 width="80" />
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <p>
+                                                            @item.Tags.Count
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        <p>
+                                                            @Html.DisplayFor(modelItem => item.Category!.Name)
+                                                        </p>
+                                                    </td>
+                                                    <td>
+                                                        @if (User.IsInRole("Administrator"))
+                                                        {
+                                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                                        }
+                                                        <a asp-action="Details" asp-route-slug="@item.Slug">Details</a>
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

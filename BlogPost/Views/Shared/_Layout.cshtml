@@ -16,8 +16,8 @@
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="~/assets/images/favicon.png">
+    <!-- Favicon --> 
+    <link rel="shortcut icon" type="image/x-icon" href="~/Img/NovaBlogLogo (1).png">
 
     <!-- CSS
     ============================================ -->
@@ -62,8 +62,8 @@
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-3 col-12">
                         <div class="logo">
                             <a asp-controller="Home" asp-action="AuthorPage">
-                                <img class="dark-logo" src="~/assets/images/logo/logo-black.png" alt="Blogar logo">
-                                <img class="light-logo" src="~/assets/images/logo/logo-white2.png" alt="Blogar logo">
+                                <img class="dark-logo" src="~/Img/NovaBlogLogoWithText (2).png" alt="Blogar logo">
+                                <img class="light-logo" src="~/Img/NovaBlogLogoWithText (2).png" alt="Blogar logo">
                             </a>
                         </div>
                     </div>
@@ -103,7 +103,10 @@
                                         </ul>
                                     </li>
                                     <li><a href="home-lifestyle-blog.html">About</a></li>
-                                    <li><a href="home-tech-blog.html">Contact</a></li>
+                                    @if (User.Identity!.IsAuthenticated)
+                                    {
+                                        <li><a asp-controller="Home" asp-action="ContactMe">Contact Me</a></li>
+                                    }
                                     @if (User.IsInRole("Administrator"))
                                     {
                                         <li class="menu-item-has-children">
@@ -292,8 +295,8 @@
                             <div class="copyright-left">
                                 <div class="logo">
                                     <a href="index.html">
-                                        <img class="dark-logo" src="~/assets/images/logo/logo-black.png" alt="Logo Images">
-                                        <img class="light-logo" src="~/assets/images/logo/logo-white2.png" alt="Logo Images">
+                                        <img class="dark-logo" src="~/Img/NovaBlogLogoWithText (2).png" alt="Logo Images">
+                                        <img class="light-logo" src="~/Img/NovaBlogLogoWithText (2).png" alt="Logo Images">
                                     </a>
                                 </div>
                                 <ul class="mainmenu justify-content-start">

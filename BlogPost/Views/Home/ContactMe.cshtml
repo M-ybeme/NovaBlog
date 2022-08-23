@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<BlogUser> _SignInManager
+
+@model NovaBlog.Models.EmailData
+
+
+<div class="container mt-5">
+    <h1 class="text-start">Let's Chat</h1>
+    <div class="post-single-wrapper axil-section-gap bg-color-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="axil-comment-area">
+                        <div class="row text-center">
+                            <div class="col-md-12 text-centered">
+                                <div class="text-center">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="p-2">
+                                                @if (_SignInManager.IsSignedIn(User))
+                                                {
+                                                    <form asp-action="ContactMe" method="post">
+                                                        @* <div class="row row-cols-1 row-cols-md-2 g-3 mb-3">
+                                                    <div class="col col-md-12">
+                                                    <label asp-for="EmailAddress" class="form-label">To:</label>
+                                                    <textarea type="email" readonly class="form-control" asp-for="EmailAddress" rows="3"></textarea>
+                                                    </div>
+                                                    </div>*@
+                                                        <div class="row row-cols-1 g-3">
+                                                            <div class="col">
+                                                                <label asp-for="Subject" class="form-label">Subject:</label>
+                                                                <input type="text" class="form-control" asp-for="Subject" />
+                                                            </div>
+                                                            <div class="col">
+                                                                <label asp-for="Body" class="form-label">Message:</label>
+                                                                <textarea class="form-control" rows=10 asp-for="Body" required></textarea>
+                                                            </div>
+                                                            <div>
+                                                                <label asp-for="UserEmail">Email Address</label>
+                                                                <input disabled asp-for="UserEmail" />
+                                                            </div>
+                                                            <div class="col text-end">
+                                                                <button class="btn btn-primary rounded-pill btnlinks" type="submit">Send</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <div class="axil-total-comment-post">
+                                                        <div class="title">
+                                                            <h4 class="mb--0">Comments</h4>
+                                                        </div>
+                                                        <div class="add-comment-button cerchio">
+                                                            <a class="axil-button button-rounded" asp-area="Identity" asp-page="/Account/Login" tabindex="0"><span>Login to Add Your Comment</span></a>
+                                                        </div>
+                                                    </div>
+                                                }                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
