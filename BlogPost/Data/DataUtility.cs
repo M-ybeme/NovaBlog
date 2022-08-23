@@ -35,7 +35,7 @@ namespace NovaBlog.Data
                 Username = userInfo[0],
                 Password = userInfo[1],
                 Database = databaseUri.LocalPath.TrimStart('/'),
-                SslMode = SslMode.Prefer,
+                SslMode = SslMode.Require,
                 TrustServerCertificate = true
             };
             return builder.ToString();
@@ -86,7 +86,7 @@ namespace NovaBlog.Data
                     EmailConfirmed = true
                 };
 
-                await userManager.CreateAsync(adminUser, configuration["AdminPwd"]);
+                await userManager.CreateAsync(adminUser, configuration["AdminPwd"] ?? Environment.GetEnvironmentVariable("AdminPwd"));
                 await userManager.AddToRoleAsync(adminUser, _adminRole);
 
             }
@@ -104,7 +104,7 @@ namespace NovaBlog.Data
                     EmailConfirmed = true
                 };
 
-                await userManager.CreateAsync(modUser, configuration["ModeratorPwd"]);
+                await userManager.CreateAsync(modUser, configuration["ModeratorPwd"] ?? Environment.GetEnvironmentVariable("ModeratorPwd"));
                 await userManager.AddToRoleAsync(modUser, _modRole);
             }
 
