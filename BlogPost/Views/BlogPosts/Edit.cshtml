@@ -39,7 +39,7 @@
                                                 <span asp-validation-for="Title" class="text-danger"></span>
                                             </div>
                                             <div class="form-group">
-                                                <label asp-for="Contnet" class="control-label">Content</label>
+                                                <label asp-for="Contnet" class="control-label fs-3">Content</label>
                                                 <textarea asp-for="Contnet" class="form-control" id="editor" rowls="7"></textarea>
                                                 <span asp-validation-for="Contnet" class="text-danger"></span>
                                             </div>
@@ -102,7 +102,7 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script src="~/ckeditor5/build/ckeditor.js"></script>
+    
     <script src="https://cdn.ckeditor.com/ckeditor5/35.0.1/super-build/ckeditor.js"></script>
     <script>
         CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
