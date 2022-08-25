@@ -34,7 +34,7 @@ namespace NovaBlog.Controllers.BlogPostController
         // GET: BlogPosts
         public async Task<IActionResult> Index()
         {
-            //TODO: Use service
+            
 
             var applicationDbContext = _context.BlogPosts
                                                .Include(b => b.Category)
@@ -288,5 +288,9 @@ namespace NovaBlog.Controllers.BlogPostController
         {
           return (_context.BlogPosts?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
+
+        public async Task<IActionResult> PopularBlogPosts
     }
+
 }
