@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace NovaBlog.Services
 {
-    public class BPEmailService : IBPEmailService
+    public class BPEmailService : IEmailSender
     {
 
         private readonly MailSettings? _mailSettings;
@@ -29,8 +29,8 @@ namespace NovaBlog.Services
 
             newEmail.Sender = MailboxAddress.Parse(emailSender);
 
-            var adminEmail = "MarloMayberry.90@gmail.com";
-            newEmail.To.Add(MailboxAddress.Parse(adminEmail));
+            //var adminEmail = "MarloMayberry.90@gmail.com";
+            newEmail.To.Add(MailboxAddress.Parse(email));
 
             
 

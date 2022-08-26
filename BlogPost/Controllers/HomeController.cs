@@ -7,6 +7,7 @@ using NovaBlog.Services.Interfaces;
 using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace NovaBlog.Controllers
 {
@@ -15,15 +16,15 @@ namespace NovaBlog.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IBlogPostService _blogPostService;
-        private readonly IBPEmailService _bPEmailService;
+        private readonly IEmailSender _emailSender;
         private readonly UserManager<BlogUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IBlogPostService blogPostService, IBPEmailService bPEmailService, UserManager<BlogUser> userManager)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IBlogPostService blogPostService, IEmailSender emailSender, UserManager<BlogUser> userManager)
         {
             _logger = logger;
             _context = context;
             _blogPostService = blogPostService;
-            _bPEmailService = bPEmailService;
+            _emailSender = emailSender;
             _userManager = userManager;
         }
 
@@ -62,6 +63,7 @@ namespace NovaBlog.Controllers
             if (ModelState.IsValid)
             {
 
+                var adminEmail = "MarloMayberry.90@gmail.com";
 
                 emailData.Body += $@"
                 <br><hr/>
@@ -78,7 +80,7 @@ namespace NovaBlog.Controllers
 
                 try
                 {
-                    await _bPEmailService.SendEmailAsync(blogUser.Email, emailData.Subject, emailData.Body);
+                    await _emailSender.SendEmailAsync(adminEmail, emailData.Subject, emailData.Body);
                     return RedirectToAction("ContactMe", "Home", new {swalMessage = "Success: Email Sent!" });
                 }
                 catch

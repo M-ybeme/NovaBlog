@@ -6,6 +6,7 @@ using NovaBlog.Services.Interfaces;
 using NovaBlog.Services;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,7 @@ builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.R
 // Custom Services
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
-builder.Services.AddScoped<IBPEmailService, BPEmailService>();
+builder.Services.AddScoped<IEmailSender, BPEmailService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
