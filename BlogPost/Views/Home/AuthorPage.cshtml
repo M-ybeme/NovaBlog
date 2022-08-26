@@ -129,7 +129,7 @@
                         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
                     </div>
                     <div class="col justify-content-center">
-                        @Html.PagedListPager(Model, pageNum => Url.Action("AuthorPage", new { searchTerm = ViewBag.SearchTerm, pageNum }),
+                        @Html.PagedListPager(Model, pageNum => Url.Action("AuthorPage", new {pageNum}),
                         new PagedListRenderOptions
                         {
                         LiElementClasses = new string[] { "page-item" },

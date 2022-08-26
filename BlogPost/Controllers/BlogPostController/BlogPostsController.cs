@@ -290,7 +290,16 @@ namespace NovaBlog.Controllers.BlogPostController
         }
 
 
-        public async Task<IActionResult> PopularBlogPosts
+        public async Task<IActionResult> PopularBlogPosts(int? pageNum)
+        {
+
+            int pageSize = 4;
+            int page = pageNum ?? 1;
+            IPagedList<BlogPost> blogPosts = await (await _blogPostService.GetPopularBlogPostsAsync(5)).Where(b => b.IsPublished == true)
+                                                          .ToPagedListAsync(page, pageSize);
+            
+            return View(blogPosts);
+        }
     }
 
 }

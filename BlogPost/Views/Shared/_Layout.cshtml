@@ -16,7 +16,7 @@
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon --> 
+    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="~/Img/NovaBlogLogo (1).png">
 
     <!-- CSS
@@ -76,32 +76,12 @@
                                     <li class="menu-item-has-children">
                                         <a asp-controller="Home" asp-action="AuthorPage">Home</a>
                                     </li>
-                                    <li class="menu-item-has-children">
-                                        <a href="#">Posts</a>
-                                        <ul class="axil-submenu">
-                                            <li>
-                                                <a class="hover-flip-item-wrapper" asp-controller="BlogPosts" asp-action="Index">
-                                                    <span class="">
-                                                        <span>All Posts</span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="hover-flip-item-wrapper" href="post-format-video.html">
-                                                    <span class="hover-flip-item">
-                                                        <span data-text="Popular Posts">Popular Posts</span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="hover-flip-item-wrapper" href="post-format-video.html">
-                                                    <span class="hover-flip-item">
-                                                        <span data-text="Recent Posts">Recent Posts</span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                    @if (User.IsInRole("Administrator"))
+                                    {
+                                        <li class="menu-item-has-children">
+                                            <a asp-controller="BlogPosts" asp-action="Index">Posts</a>
+                                        </li>
+                                    }
                                     <li><a href="https://marlomayberrydevportfolio.netlify.app/">About</a></li>
                                     @if (User.Identity!.IsAuthenticated)
                                     {
@@ -305,7 +285,14 @@
                                                 <span data-text="Contact Us">Contact Me</span>
                                             </span>
                                         </a>
-                                    </li>                                    
+                                    </li>
+                                    <li>
+                                        <a class="hover-flip-item-wrapper" asp-controller="Home" asp-action="Privacy">
+                                            <span class="hover-flip-item">
+                                                <span data-text="Privacy">Privacy Policy</span>
+                                            </span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

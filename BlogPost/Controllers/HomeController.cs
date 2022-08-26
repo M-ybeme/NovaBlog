@@ -31,8 +31,10 @@ namespace NovaBlog.Controllers
         {
             int pageSize = 4;
             int page = pageNum ?? 1;
-            IPagedList<BlogPost> blogPosts = await (await _blogPostService.GetAllBlogPostsAsync()).Where(b => b.IsPublished == true)
-                                                          .ToPagedListAsync(page, pageSize);
+            IPagedList<BlogPost> blogPosts = await (await _blogPostService.GetAllBlogPostsAsync())
+                                                                          .Where(b => b.IsPublished == true)
+                                                                          .OrderByDescending(b => b.Created)
+                                                                          .ToPagedListAsync(page, pageSize);
 
             //List<BlogPost> posts = (await _blogPostService.GetAllBlogPostsAsync()).Where(b => b.IsPublished == true).ToList();
 
