@@ -160,6 +160,10 @@
                                     BlogUser blogUser = await _UserManager.GetUserAsync(User);
 
                                     <li class=""><a class="btn btn-default" href="javascript:document.getElementById('logoutForm').submit();"><i class="fa fa-sign-out fa-3x" aria-hidden="true"></i></a></li>
+                                    if(blogUser.ImageData == null)
+                                    {
+                                        <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><img src="~/Img/DefaultUserIamge.png" /></a></li>
+                                    }
                                     <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><img src="@_ImageService.ConvertByteArrayToFile(blogUser.ImageData!, blogUser.ImageType!, (int)DefaultImage.BlogUser)" alt="Author Images"></a></li>
                                 }
                             </ul>
