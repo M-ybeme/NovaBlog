@@ -43,10 +43,10 @@ namespace NovaBlog.Services
             using SmtpClient smtpClient = new();
             try
             {
-                var host = _mailSettings.Host ?? Environment.GetEnvironmentVariable("Email");
+                var host = _mailSettings.Host ?? Environment.GetEnvironmentVariable("Host");
                 var port = _mailSettings.Port != 0 ? _mailSettings.Port : int.Parse(Environment.GetEnvironmentVariable("Port")!);
                 await smtpClient.ConnectAsync(host, port, SecureSocketOptions.StartTls);
-                await smtpClient.AuthenticateAsync(emailSender, _mailSettings.Password ?? Environment.GetEnvironmentVariable("Email"));
+                await smtpClient.AuthenticateAsync(emailSender, _mailSettings.Password ?? Environment.GetEnvironmentVariable("Password"));
 
                 await smtpClient.SendAsync(newEmail);
                 await smtpClient.DisconnectAsync(true);
