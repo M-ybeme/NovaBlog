@@ -186,8 +186,8 @@
                 <div class="mobile-menu-top">
                     <div class="logo">
                         <a href="index.html">
-                            <img class="dark-logo" src="~/assets/images/logo/logo-black.png" alt="Logo Images">
-                            <img class="light-logo" src="~/assets/images/logo/logo-white2.png" alt="Logo Images">
+                            <img class="dark-logo" src="~/Img/NovaBlogLogoWithText (2).png" alt="Logo Images">
+                            <img class="light-logo" src="~/Img/NovaBlogLogoWithText (2).png" alt="Logo Images">
                         </a>
                     </div>
                     <div class="mobile-close">
@@ -199,50 +199,55 @@
                 <ul class="mainmenu">
                     <li class="menu-item-has-children">
                         <a asp-controller="Home" asp-action="AuthorPage">Home</a>
-                        <ul class="axil-submenu">
-                            <li><a asp-controller="Home" asp-action="AuthorPage">Home Default</a></li>
-                        </ul>
                     </li>
-                    <li class="menu-item-has-children">
-                        <a href="#">Categories</a>
-                        <ul class="axil-submenu">
-                            <li><a href="post-details.html">Accessibility</a></li>
-                            <li><a href="post-details.html">Android Dev</a></li>
-                            <li><a href="post-details.html">Accessibility</a></li>
-                            <li><a href="post-details.html">Android Dev</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children">
-                        <a href="#">Post Format</a>
-                        <ul class="axil-submenu">
-                            <li><a href="post-format-standard.html">Post Format Standard</a></li>
-                            <li><a href="post-format-video.html">Post Format Video</a></li>
-                            <li><a href="post-format-gallery.html">Post Format Gallery</a></li>
-                            <li><a href="post-format-text.html">Post Format Text Only</a></li>
-                            <li><a href="post-layout-1.html">Post Layout One</a></li>
-                            <li><a href="post-layout-2.html">Post Layout Two</a></li>
-                            <li><a href="post-layout-3.html">Post Layout Three</a></li>
-                            <li><a href="post-layout-4.html">Post Layout Four</a></li>
-                            <li><a href="post-layout-5.html">Post Layout Five</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children">
-                        <a href="#">Pages</a>
-                        <ul class="axil-submenu">
-                            <li><a href="post-list.html">Post List</a></li>
-                            <li><a href="archive.html">Post Archive</a></li>
-                            <li><a href="author.html">Author Page</a></li>
-                            <li><a href="about.html">About Page</a></li>
-                            <li><a href="maintenance.html">Maintenance</a></li>
-                            <li><a href="contact.html">Contact Us</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="404.html">404 Page</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                </ul>
-                <div class="buy-now-btn">
-                    <a href="#">Buy Now <span class="badge">$15</span></a>
-                </div>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <li class="menu-item-has-children">
+                            <a asp-controller="BlogPosts" asp-action="Index">Posts</a>
+                        </li>
+                    }
+                    <li><a href="https://marlomayberrydevportfolio.netlify.app/">About</a></li>
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        <li><a asp-controller="Home" asp-action="ContactMe">Contact Me</a></li>
+                    }
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <li class="menu-item-has-children">
+                            <a href="#">Author</a>
+                            <ul class="axil-submenu">
+                                <li>
+                                    <a class="hover-flip-item-wrapper" asp-controller="BlogPosts" asp-action="Create">
+                                        <span class="">
+                                            <span>New Post</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover-flip-item-wrapper" asp-controller="BlogPosts" asp-action="Index">
+                                        <span class="hover-flip-item">
+                                            <span data-text="Manage Posts">Manage Posts</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover-flip-item-wrapper" asp-controller="Categories" asp-action="Index">
+                                        <span class="hover-flip-item">
+                                            <span data-text="Manage Categories">Manage Categories</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover-flip-item-wrapper" asp-controller="Tags" asp-action="Index">
+                                        <span class="hover-flip-item">
+                                            <span data-text="Manage Tags">Manage Tags</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                </ul>                
             </div>
         </div>
         <!-- End Mobile Menu Area  -->
