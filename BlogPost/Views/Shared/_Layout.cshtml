@@ -148,22 +148,27 @@
                                 </form>
                             </div>
                             <ul class="metabar-block">
-                                @if (!User.Identity!.IsAuthenticated)
+                                @if (User.Identity!.IsAuthenticated)
                                 {
-                                    <li class=""><a class="btn btn-outline-success" asp-area="Identity" asp-page="/Account/Login"><i class="fa fa-sign-in fa-2x" aria-hidden="true"></i></a></li>                                    
-
+                                    BlogUser blogUser = await _UserManager.GetUserAsync(User);
+                                    <li>
+                                        <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                            <img src="@_ImageService.ConvertByteArrayToFile(blogUser.ImageData!, blogUser.ImageType!, (int)DefaultImage.BlogUser)" alt="Author Images">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="btn btn-default" href="javascript:document.getElementById('logoutForm').submit();">
+                                            <i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+                                        </a>
+                                    </li>
                                 }
                                 else
                                 {
-
-                                    BlogUser blogUser = await _UserManager.GetUserAsync(User);
-
-                                    <li class=""><a class="btn btn-default" href="javascript:document.getElementById('logoutForm').submit();"><i class="fa fa-sign-out fa-3x" aria-hidden="true"></i></a></li>
-                                    if(blogUser.ImageFile == null)
-                                    {
-                                        <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><img src="~/Img/DefaultUserIamge.png" /></a></li>
-                                    }
-                                    <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><img src="@_ImageService.ConvertByteArrayToFile(blogUser.ImageData!, blogUser.ImageType!, (int)DefaultImage.BlogUser)" alt="Author Images"></a></li>
+                                    <li class="">
+                                        <a class="btn btn-outline-success" asp-area="Identity" asp-page="/Account/Login">
+                                            <i class="fa fa-sign-in fa-2x" aria-hidden="true"></i>
+                                        </a>
+                                    </li>
                                 }
                             </ul>
 
@@ -247,7 +252,7 @@
                             </ul>
                         </li>
                     }
-                </ul>                
+                </ul>
             </div>
         </div>
         <!-- End Mobile Menu Area  -->
