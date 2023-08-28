@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-BlogPost-4FFFEA51-C22F-4A7E-9FDD-F0265AA40302</UserSecretsId>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <InvariantGlobalization>True</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>

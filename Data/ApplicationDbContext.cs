@@ -15,6 +15,5 @@ namespace NovaBlog.Data
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
-
     }
 }
